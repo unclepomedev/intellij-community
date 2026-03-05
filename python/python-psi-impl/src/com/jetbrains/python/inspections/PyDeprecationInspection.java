@@ -130,9 +130,15 @@ public final class PyDeprecationInspection extends PyInspection {
       @NlsSafe String deprecationMessage = deprecatable.getDeprecationMessage();
 
       if (deprecationMessage == null && !(callable.getContainingFile() instanceof PyiFile)) {
-        PsiElement stub = PyiUtil.getPythonStub(callable);
-        if (stub instanceof PyDeprecatable stubDeprecatable) {
-          deprecationMessage = stubDeprecatable.getDeprecationMessage();
+        PsiElement classStub = PyiUtil.getPythonStub(cls);
+        if (classStub instanceof PyClass stubClass) {
+          Property stubProperty = stubClass.findProperty(name, true, myTypeEvalContext);
+          if (stubProperty != null) {
+            PyCallable stubSetter = stubProperty.getByDirection(AccessDirection.WRITE).valueOrNull();
+            if (stubSetter instanceof PyDeprecatable stubDeprecatable) {
+              deprecationMessage = stubDeprecatable.getDeprecationMessage();
+            }
+          }
         }
       }
 

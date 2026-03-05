@@ -63,6 +63,12 @@ public class PyDeprecationTest extends PyTestCase {
     myFixture.checkHighlighting(true, false, false);
   }
 
+  public void testDeprecatedPropertySetterFromStub() {
+    myFixture.enableInspections(PyDeprecationInspection.class);
+    myFixture.configureByFiles("deprecation/deprecatedPropertySetterFromStub.py", "deprecation/deprecatedPropertySetterFromStub.pyi");
+    myFixture.checkHighlighting(true, false, false);
+  }
+
   public void testDeprecatedImport() {
     myFixture.enableInspections(PyDeprecationInspection.class);
     myFixture.configureByFiles("deprecation/deprecatedImport.py", "deprecation/deprecatedModule.py");
